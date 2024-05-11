@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION "3.28.0")
+
+project(Mordred-Engine)
+set (Mordred-Engine_VERSION_MAJOR 0)
+set (Mordred-Engine_VERSION_MINOR 0)
+set (Mordred-Engine_VERSION_PATCH 0)
+set(CMAKE_CXX_STANDARD 17)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/glm")
+find_package(Vulkan)
+add_executable("Mordred-Engine" "main/main.cpp" "Mordred Engine/Servers/VulkanServer.h" "Mordred Engine/Servers/VulkanServer.cpp")
+target_include_directories(Mordred-Engine 
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/main"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/include/"
+)
+
+target_link_libraries(Mordred-Engine PRIVATE glm)
+target_link_libraries(Mordred-Engine PRIVATE glfw)
+target_link_libraries(Mordred-Engine PRIVATE Vulkan::Vulkan)
+

@@ -1,6 +1,6 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-
+#include <Mordred Engine/Servers/VulkanServer.h>
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
@@ -65,26 +65,27 @@ private:
 public:
     void run() 
     {
+        //init vulkan for now but add openGL support later
         initVulkan();
         initWindow();
         update();
         clean();
-        char String[] = "Hello World \0";
-        std::printf(String);
+
     }
 };
 
 int main() 
 {
     Mordred mordred;
-
-    try {
+    char String[] = "Hello World \0";
+    std::printf(String);
+   try {
         mordred.run();
     }
     catch(const std::exception& e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
-    }
+  }
 
     return EXIT_SUCCESS;
 }
