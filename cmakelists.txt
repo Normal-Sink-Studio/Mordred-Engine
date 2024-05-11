@@ -16,6 +16,7 @@ target_include_directories(Mordred-Engine
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/main"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/include/"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Mordred Engine/Servers"
 )
 
 target_link_libraries(Mordred-Engine PRIVATE glm)

@@ -1,8 +1,9 @@
 #include "VulkanServer.h"
 
+using namespace VulkanServer;
 void VulkanServer::initVulkan()
 {
-	createInstance();
+	VulkanServer::createInstance();
 };
 
 void VulkanServer::createInstance()

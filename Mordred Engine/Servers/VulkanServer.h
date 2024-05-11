@@ -6,13 +6,14 @@
 #pragma once
 #ifdef VULKAN_SERVER
 #define VULKAN_SERVER
-class VulkanServer
-{
-private:
-	void initVulkan();
-	void createInstance();
-};
+namespace VulkanServer {
+	class VulkanServer
+	{
+	private:
+		void initVulkan();
+		void createInstance();
+	};
 public:
 	VkInstance instance;
-
+}
 #endif
