@@ -11,7 +11,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/glm")
 find_package(Vulkan)
-add_executable("Mordred-Engine" "main/main.cpp" "Mordred Engine/Servers/VulkanServer.h" "Mordred Engine/Servers/VulkanServer.cpp")
+add_executable("Mordred-Engine" "main/app.cpp")
 target_include_directories(Mordred-Engine 
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/main"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/"
