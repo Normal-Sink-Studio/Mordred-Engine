@@ -1,1 +1,1 @@
-Mordred Engine is a proprietary engine being developed by Oreboat, it is closed source at the moment and meant to be used by Oreboat or those trusted by Oreboat
+Mordred Engine is a proprietary ECS Game Engine being built for the use of those approved by Normal Sink Studios
