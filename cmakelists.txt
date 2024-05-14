@@ -12,7 +12,7 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/glm")
 
 find_package(Vulkan REQUIRED)
-add_executable("Mordred-Engine" "src/app.cpp")
+add_executable("Mordred-Engine" "src/app/app.cpp" "src/Render/GL_V_Window.cpp" "src/app/engine.cpp")
 target_include_directories(Mordred-Engine 
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/include/"
