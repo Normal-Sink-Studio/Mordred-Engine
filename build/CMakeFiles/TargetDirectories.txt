@@ -1,2 +1,0 @@
-C:/Users/trist/Desktop/Mordred Engine/Mordred Engine/build/CMakeFiles/edit_cache.dir
-C:/Users/trist/Desktop/Mordred Engine/Mordred Engine/build/CMakeFiles/rebuild_cache.dir
