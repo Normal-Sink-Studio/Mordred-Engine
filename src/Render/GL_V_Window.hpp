@@ -15,7 +15,6 @@ namespace Mordred
 	private:
 
 		void InitWindow(); //create the window
-
 		const int width; //width
 		const int height; //height
 		std::string windowName; // window name
