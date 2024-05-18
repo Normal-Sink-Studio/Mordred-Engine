@@ -8,7 +8,7 @@ int main()
 	{
 		mEngine.run(); //run the engine
 	}
-	catch (const std::exception& e) //otherwise retyrn a failure
+	catch (const std::exception& e) //otherwise return a failure
 	{
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
