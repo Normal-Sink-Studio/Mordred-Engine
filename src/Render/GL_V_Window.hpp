@@ -20,4 +20,4 @@ namespace Mordred
 		std::string windowName; // window name
 		GLFWwindow* glWindow; //GLFW window
 	};
-}
+};

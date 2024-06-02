@@ -11,7 +11,7 @@ namespace Mordred
 		const std::string name = "Mordred Engine";// window name
 		void run(); //function to run the window
 	private:
-		GL_V_Window window{width, height, name}; //create window object
+		GL_V_Window window{ width, height, name }; //create window object
 	};
 
-}
+};
