@@ -17,9 +17,11 @@ target_include_directories(Mordred-Engine
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glm-1.0.1-light/"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/include/"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/extern/flecs"
 )
 
 target_link_libraries(Mordred-Engine PRIVATE glm)
 target_link_libraries(Mordred-Engine PRIVATE Vulkan::Vulkan)
 target_link_libraries(Mordred-Engine PRIVATE glfw)
+target_link_libraries(Fle)
 

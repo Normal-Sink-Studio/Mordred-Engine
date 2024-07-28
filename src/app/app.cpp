@@ -1,12 +1,12 @@
+#include "engine.hpp"
 #include <iostream>
-#include <src/app/engine.hpp>
 
 int main()
 {
-	Mordred::engine mEngine; //create engine object
+	 //create engine object
 	try //try running the enginee
 	{
-		mEngine.run(); //run the engine
+		Mordred::run(); //run the engine
 	}
 	catch (const std::exception& e) //otherwise retyrn a failure
 	{
