@@ -1,1 +1,1 @@
-Mordred Engine is a proprietary ECS Game Engine being built for the use of those approved by Normal Sink Studios
+Mordred Engine is a proprietary, Entity Component System Based, engine being developed by Normal Sink Studios
