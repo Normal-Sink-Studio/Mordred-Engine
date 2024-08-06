@@ -367,6 +367,8 @@ FodyWeavers.xsd
 /bin
 /.vs
 .idea/
+/build
+/.vscode
 CMakeSettings.json
 
 CMakeLists.txt.user

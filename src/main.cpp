@@ -1,12 +1,14 @@
-#include "engine.hpp"
+#include "Engine/engine.hpp"
+//#include "Render/OpenGLServer.hpp"
+using namespace std;
 #include <iostream>
 
 int main()
 {
-	 //create engine object
 	try //try running the enginee
 	{
-		Mordred::run(); //run the engine
+		 //run the engine
+		 Engine::run();
 	}
 	catch (const std::exception& e) //otherwise retyrn a failure
 	{
@@ -15,4 +17,5 @@ int main()
 	}
 
 	return EXIT_SUCCESS;
+
 }

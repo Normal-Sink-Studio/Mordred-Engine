@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/extern/flecs",
+                "${workspaceFolder}/src/app/Render"
             ],
             "defines": [],
             "cStandard": "c17",

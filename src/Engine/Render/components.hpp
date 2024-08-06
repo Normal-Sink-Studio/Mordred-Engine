@@ -1,0 +1,25 @@
+#include <string>
+#include "GL/gl.h"
+#include "GL/glx.h"
+#ifdef _WIN32 
+#include "windows.h"
+#elif __linux__
+#include "X11/Xlib.h"
+#endif
+
+namespace Mordred
+{
+    namespace Components
+    {
+        struct Mesh{std::string path;}; //I will add actual mesh stuff later when
+
+        struct OpenGLLinux
+        {
+            Display *display;
+            Window window;
+            GLXContext glxContext;
+            XEvent xevent;
+            int displayStatus;
+        };
+    }
+}
