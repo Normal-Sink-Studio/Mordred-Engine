@@ -13,6 +13,7 @@ namespace Mordred
     {
         struct Mesh{std::string path;}; //I will add actual mesh stuff later when
 
+        #ifdef __linux__
         struct OpenGLLinux
         {
             Display *display;
@@ -21,5 +22,17 @@ namespace Mordred
             XEvent xevent;
             int displayStatus;
         };
+        #elif WIN32
+        struct OpenGLWindows
+        {
+            WNDCLASS windowClass;
+            HDC hdc;
+            HGLRC hRC;
+            HWND hWnd;
+            MSG msg;
+            HINSTANCE hInstance;
+            bool quit = false;
+        }
+        #endif
     }
 }

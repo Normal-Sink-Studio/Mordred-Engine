@@ -22,6 +22,10 @@ void OpenGLRenderer::StartOpenGL(ecs_world_t *world)
     printf("Starting Render Engine\n");
     #ifdef _WIN32 
         printf("Initializing Engine in Windows Mode\n"); 
+        ECS_COMPONENT(world, OpenGLWindows);
+        ecs_add(world, window, OpenGLWindows);
+        ECS_SYSTEM(world, CreateContextWindows, EcsOnStart, OpenGLWindows);
+        ECS_SYSTEM(world, RunOpenGLWindows, EcsOnUpdate, OpenGLWindows);
     #elif __linux__ 
         printf("Initializing Engine in Linux Mode\n"); 
         ECS_COMPONENT(world, OpenGLLinux);
@@ -34,6 +38,7 @@ void OpenGLRenderer::StartOpenGL(ecs_world_t *world)
     
 }
 #pragma region Linux
+#ifdef __linux__
 void OpenGLRenderer::CreateContextLinux(ecs_iter_t *it)
 {
     printf("Creating Linux Context\n");
@@ -57,7 +62,7 @@ void OpenGLRenderer::CreateContextLinux(ecs_iter_t *it)
     (
         linuxContext->display, 
         RootWindow(linuxContext->display, visualInfo->screen),
-        0, 0, 800, 600, 0, 
+        0, 0, 1152, 648, 0, 
         visualInfo->depth, 
         InputOutput, 
         visualInfo->visual, 
@@ -65,6 +70,15 @@ void OpenGLRenderer::CreateContextLinux(ecs_iter_t *it)
         &setWindowAttributes
     );
     XStoreName(linuxContext->display, linuxContext->window, "Mordred Engine");
+    
+
+    Atom wmState = XInternAtom(linuxContext->display, "_NET_WM_STATE", False);
+    Atom maxH = XInternAtom(linuxContext->display, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+    Atom maxV = XInternAtom(linuxContext->display, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+
+    XChangeProperty(linuxContext->display, linuxContext->window, wmState, XA_ATOM, 32, PropModeReplace, (unsigned char *)&maxH, 1);
+    XChangeProperty(linuxContext->display, linuxContext->window, wmState, XA_ATOM, 32, PropModeAppend, (unsigned char *)&maxV, 1);
+
     XMapWindow(linuxContext->display,linuxContext->window);
 
     linuxContext->glxContext = glXCreateContext(linuxContext->display, visualInfo, NULL, GL_TRUE);
@@ -92,10 +106,97 @@ void OpenGLRenderer::RunOpenGLLinux(ecs_iter_t *it)
 
 void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 {
-    OpenGLLinux *linuxContext = ecs_field(it, OpenGLLinux, 0);
+    OpenGLLinux *linuxContext;
     glXMakeCurrent(linuxContext->display, None, NULL);
+    glXDestroyContext(linuxContext->display, linuxContext->glxContext);
     glXDestroyContext(linuxContext->display, linuxContext->glxContext);
     XCloseDisplay(linuxContext->display);
 }
+#endif
 #pragma endregion
- 
+#pragma region Windows
+#ifdef WIN32
+void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
+{
+    OpenGLWindows windowsContext = ecs_field(it, OpenGLWindows, 0);
+    SetWindowContext(windowsContext->windowClass);
+    RegisterClass(windowsContext->windowClass);
+    windowsContext->hWnd = CreateWindow(
+        "OpenGLWinClass", "Mordred Engine",
+        WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        NULL, NULL, hInstance, NULL);
+    PIXELFORMATDESCRIPTOR pixelFormatDescriptor = setPixelFormat();
+
+    int pixelFormat = ChoosePixelFormat(windowsContext->hdc, &pixelFormatDescriptor);
+    SetPixelFormat(windowsContext->hdc, pixelFormat, &pixelFormatDescriptor);
+
+    windowsContext->hRC = wglCreateContext(windowsContext->hdc);
+    wglMakeCurrent(windowsContext->hdc, windowsContext->hRC);
+
+    ShowWindow(windowsContext->hWnd, SW_SHOW);
+    UpdateWindow(windowsContext->hWnd);
+}
+PIXELFORMATDESCRIPTOR OpenGLRenderer::setPixelFormat()
+{
+    PIXELFORMATDESCRIPTOR pfd;
+    memset(&pfd, 0, sizeof(pfd));
+    pfd.nSize = sizeof(pfd);
+    pfd.nVersion = 1;
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.cColorBits = 24;
+    pfd.cDepthBits = 32;
+    pfd.iLayerType = PFD_MAIN_PLANE;
+    return &pfd;
+
+}
+void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
+{
+    OpenGLWindows windowsContext= ecs_field(it, OpenGLWindows, 0);
+    while(!windowsContext->quit)
+    {
+        if (PeekMessage(&windowsContext->msg, NULL, 0, 0, PM_REMOVE)) {
+            if (windowsContext->msg.message == WM_QUIT) {
+                windowsContext->quit = TRUE;
+            } 
+            else 
+            {
+                TranslateMessage(&windowsContext->msg);
+                DispatchMessage(&windowsContext->msg);
+            }
+        } 
+        else 
+        {
+            // OpenGL rendering code goes here
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // Render scene
+            SwapBuffers(windowsContext->hdc);
+        }
+    }
+}
+void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
+{
+    OpenGLWindows windowsContext = ecs_field(it, OpenGLWindows, 0);
+    wglMakeCurrent(NULL, NULL);
+    wglDeleteContext(windowsContext->hRC);
+    ReleaseDC(windowsContext->hWnd, windowsContext->hdc);
+    DestroyWindow(windowsContext->hWnd);
+    UnregisterClass("OpenGLWinClass", windowsContext->hInstance);
+}
+void OpenGLRenderer::SetWindowContext(WNDCLASS *wc)
+{
+    wc.style = CS_OWNDC;
+    wc.lpfnWndProc = WndProc;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
+    wc.hInstance = hInstance;
+    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = "OpenGLWinClass";
+}
+#endif
+#pragma endregion

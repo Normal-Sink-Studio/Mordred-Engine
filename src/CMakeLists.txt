@@ -5,39 +5,58 @@ set (Mordred-Engine_VERSION_MAJOR 0)
 set (Mordred-Engine_VERSION_MINOR 0)
 set (Mordred-Engine_VERSION_PATCH 0)
 
-
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 find_package(OpenGL REQUIRED)
-find_package(X11 REQUIRED)
-set(CMAKE_CXX_STANDARD 20)
-add_executable("Mordred-Engine" main.cpp Engine/engine.cpp Engine/Render/OpenGLServer.cpp)
-FetchContent_Declare(
-  flecs
-  GIT_REPOSITORY https://github.com/SanderMertens/flecs.git
-  GIT_TAG master
-)
-FetchContent_Declare(
-	glfw
-	GIT_REPOSITORY https://github.com/glfw/glfw.git
-	GIT_TAG master
-)
-FetchContent_MakeAvailable(flecs)
-target_include_directories(Mordred-Engine 
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-)
 
-target_link_libraries(Mordred-Engine 
-  PRIVATE flecs::flecs_static
-  PRIVATE OpenGL::GL
-  PRIVATE ${X11_LIBRARIES}
+if (WIN32)
+  # Windows-specific settings
+  set(CMAKE_CXX_STANDARD 20)
+  add_executable("Mordred-Engine" main.cpp Engine/engine.cpp Engine/Render/OpenGLServer.cpp)
   
-)
+  FetchContent_Declare(
+    flecs
+    GIT_REPOSITORY https://github.com/SanderMertens/flecs.git
+    GIT_TAG master
+  )
+  FetchContent_MakeAvailable(flecs)
+  
+  target_include_directories(Mordred-Engine 
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/"
+  )
 
-# Include X11 headers
-include_directories(${X11_INCLUDE_DIR})
+  target_link_libraries(Mordred-Engine 
+    PRIVATE flecs::flecs_static
+    PRIVATE OpenGL::GL
+    PRIVATE gdi32
+  )
+else()
+  # Linux-specific settings
+  find_package(X11 REQUIRED)
+  
+  set(CMAKE_CXX_STANDARD 20)
+  add_executable("Mordred-Engine" main.cpp Engine/engine.cpp Engine/Render/OpenGLServer.cpp)
+  
+  FetchContent_Declare(
+    flecs
+    GIT_REPOSITORY https://github.com/SanderMertens/flecs.git
+    GIT_TAG master
+  )
+  FetchContent_MakeAvailable(flecs)
+  
+  target_include_directories(Mordred-Engine 
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/"
+  )
 
+  target_link_libraries(Mordred-Engine 
+    PRIVATE flecs::flecs_static
+    PRIVATE OpenGL::GL
+    PRIVATE ${X11_LIBRARIES}
+  )
 
+  # Include X11 headers
+  include_directories(${X11_INCLUDE_DIR})
+endif()
