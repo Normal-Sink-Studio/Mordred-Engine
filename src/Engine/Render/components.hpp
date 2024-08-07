@@ -1,10 +1,10 @@
 #include <string>
 #include "GL/gl.h"
-#include "GL/glx.h"
 #ifdef _WIN32 
 #include "Windows.h"
 #elif __linux__
 #include "X11/Xlib.h"
+#include "GL/glx.h"
 #endif
 
 namespace Mordred

@@ -1,7 +1,5 @@
 
 #include "OpenGLServer.hpp"
-#include <X11/X.h>
-#include <X11/Xlib.h>
 
 
 using namespace OpenGLRenderer;
