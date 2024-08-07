@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <stdio.h> 
 #ifdef _WIN32 
-#include "windows.h"
+#include "Windows.h"
 #elif __linux__
 #include "X11/Xlib.h"
 #include <GL/glx.h>
