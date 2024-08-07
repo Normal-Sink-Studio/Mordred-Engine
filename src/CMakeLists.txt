@@ -37,7 +37,7 @@ else()
   # Linux-specific settings
   find_package(X11 REQUIRED)
   
-  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 17)
   add_executable("Mordred-Engine" main.cpp Engine/engine.cpp Engine/Render/OpenGLServer.cpp)
   
   FetchContent_Declare(

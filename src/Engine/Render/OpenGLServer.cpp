@@ -12,7 +12,6 @@ void OpenGLRenderer::runSystems(ecs_world_t *world)
 {
     
     OpenGLRenderer::StartOpenGL(world);
-    //ECS_SYSTEM(world, Start, EcsOnStart);
 }
 
 void OpenGLRenderer::StartOpenGL(ecs_world_t *world)
@@ -32,7 +31,6 @@ void OpenGLRenderer::StartOpenGL(ecs_world_t *world)
         ecs_add(world, window, OpenGLLinux);
         ECS_SYSTEM(world, CreateContextLinux, EcsOnStart, OpenGLLinux);
         ECS_SYSTEM(world, RunOpenGLLinux, EcsOnUpdate, OpenGLLinux);
-        
     #endif
 
     
