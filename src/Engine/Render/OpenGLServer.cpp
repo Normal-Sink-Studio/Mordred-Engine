@@ -1,7 +1,6 @@
 
 #include "OpenGLServer.hpp"
 
-
 using namespace OpenGLRenderer;
 using namespace Mordred;
 using namespace  Components;

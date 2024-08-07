@@ -1,7 +1,8 @@
 #include <string>
-#include "GL/gl.h"
+
 #ifdef _WIN32 
 #include "Windows.h"
+#include "GL/gl.h"
 #elif __linux__
 #include "X11/Xlib.h"
 #include "GL/glx.h"

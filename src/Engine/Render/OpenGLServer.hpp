@@ -6,13 +6,16 @@
 #include <stdio.h> 
 #ifdef _WIN32 
 #include "Windows.h"
+#include <GL/gl.h>
 #elif __linux__
 #include "X11/Xlib.h"
+
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #endif
+
 
 namespace OpenGLRenderer
 {
