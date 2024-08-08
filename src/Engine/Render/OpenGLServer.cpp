@@ -1,6 +1,11 @@
 
 #include "OpenGLServer.hpp"
 
+#include "flecs.h"
+#include "components.hpp"
+#include <cstddef>
+#include <stdio.h> 
+
 using namespace OpenGLRenderer;
 using namespace Mordred;
 using namespace  Components;

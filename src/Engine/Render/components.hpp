@@ -33,7 +33,7 @@ namespace Mordred
             MSG msg;
             HINSTANCE hInstance;
             bool quit = false;
-        }
+        };
         #endif
     }
 }
