@@ -1,3 +1,6 @@
+#ifndef OpenGLServer
+#define OpenGLServer
+
 #pragma once
 #include "flecs.h"
 #include "components.hpp"
@@ -37,3 +40,4 @@ namespace OpenGLRenderer
     #endif
     #pragma endregion
 }
+#endif

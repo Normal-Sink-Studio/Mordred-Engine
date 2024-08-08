@@ -2,7 +2,7 @@
 #include "OpenGLServer.hpp"
 
 #include "flecs.h"
-#include "components.hpp"
+#include "renderComponents.hpp"
 #include <cstddef>
 #include <stdio.h> 
 

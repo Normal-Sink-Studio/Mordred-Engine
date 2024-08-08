@@ -1,3 +1,6 @@
+#ifndef engine
+#define engine
+
 #pragma once
 #include<string>
 #include "Render/OpenGLServer.hpp"
@@ -13,3 +16,5 @@ namespace Engine
 	
 
 }
+
+#endif

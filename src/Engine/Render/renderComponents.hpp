@@ -1,3 +1,5 @@
+#ifndef renderComponents
+#define renderComponents
 #include <string>
 
 #ifdef _WIN32 
@@ -37,3 +39,4 @@ namespace Mordred
         #endif
     }
 }
+#endif
