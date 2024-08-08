@@ -116,21 +116,35 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 #pragma endregion
 #pragma region Windows
 #ifdef WIN32
+void OpenGLRenderer::SetWindowContext(WNDCLASS* wc, OpenGLWindows* windowsContext)
+{
+    wc->style = CS_OWNDC;
+    wc->lpfnWndProc = windowsContext->WndProc;
+    wc->cbClsExtra = 0;
+    wc->cbWndExtra = 0;
+    wc->hInstance = windowsContext->hInstance;
+    wc->hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wc->hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc->hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wc->lpszMenuName = NULL;
+    wc->lpszClassName = "OpenGLWinClass";
+}
+
 void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
 {
-    OpenGLWindows windowsContext = ecs_field(it, OpenGLWindows, 0);
-    SetWindowContext(windowsContext->windowClass);
+    OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
+    SetWindowContext(windowsContext->windowClass, windowsContext);
     RegisterClass(windowsContext->windowClass);
     windowsContext->hWnd = CreateWindow(
         "OpenGLWinClass", "Mordred Engine",
         WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
         CW_USEDEFAULT, CW_USEDEFAULT,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL, NULL, hInstance, NULL);
-    PIXELFORMATDESCRIPTOR pixelFormatDescriptor = setPixelFormat();
+        NULL, NULL, windowsContext->hInstance, NULL);
+    PIXELFORMATDESCRIPTOR* pixelFormatDescriptor = setPixelFormat();
 
-    int pixelFormat = ChoosePixelFormat(windowsContext->hdc, &pixelFormatDescriptor);
-    SetPixelFormat(windowsContext->hdc, pixelFormat, &pixelFormatDescriptor);
+    int pixelFormat = ChoosePixelFormat(windowsContext->hdc, pixelFormatDescriptor);
+    SetPixelFormat(windowsContext->hdc, pixelFormat, pixelFormatDescriptor);
 
     windowsContext->hRC = wglCreateContext(windowsContext->hdc);
     wglMakeCurrent(windowsContext->hdc, windowsContext->hRC);
@@ -138,7 +152,7 @@ void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
     ShowWindow(windowsContext->hWnd, SW_SHOW);
     UpdateWindow(windowsContext->hWnd);
 }
-PIXELFORMATDESCRIPTOR OpenGLRenderer::setPixelFormat()
+PIXELFORMATDESCRIPTOR* OpenGLRenderer::setPixelFormat()
 {
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(pfd));
@@ -154,7 +168,7 @@ PIXELFORMATDESCRIPTOR OpenGLRenderer::setPixelFormat()
 }
 void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
 {
-    OpenGLWindows windowsContext= ecs_field(it, OpenGLWindows, 0);
+    OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
     while(!windowsContext->quit)
     {
         if (PeekMessage(&windowsContext->msg, NULL, 0, 0, PM_REMOVE)) {
@@ -178,25 +192,13 @@ void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
 }
 void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
 {
-    OpenGLWindows windowsContext = ecs_field(it, OpenGLWindows, 0);
+    OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(windowsContext->hRC);
     ReleaseDC(windowsContext->hWnd, windowsContext->hdc);
     DestroyWindow(windowsContext->hWnd);
     UnregisterClass("OpenGLWinClass", windowsContext->hInstance);
 }
-void OpenGLRenderer::SetWindowContext(WNDCLASS *wc)
-{
-    wc.style = CS_OWNDC;
-    wc.lpfnWndProc = WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = "OpenGLWinClass";
-}
+
 #endif
 #pragma endregion

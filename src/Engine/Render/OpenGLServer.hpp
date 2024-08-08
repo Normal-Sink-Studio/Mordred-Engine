@@ -3,7 +3,7 @@
 
 #pragma once
 #include "flecs.h"
-#include "components.hpp"
+#include "renderComponents.hpp"
 
 #include <cstddef>
 #include <stdio.h> 
@@ -32,11 +32,12 @@ namespace OpenGLRenderer
     #endif
     #pragma endregion
     #pragma region Windows
-    #ifdef Win32
+    #ifdef WIN32
     void CreateContextWindows(ecs_iter_t *it);
-    void SetWindowContext(WNDCLASS *wc);
+    void SetWindowContext(WNDCLASS *wc, OpenGLWindows*);
     void RunOpenGLWindows(ecs_iter_t *it);
     void EndOpenGLWindows(ecs_iter_t *it);
+    PIXELFORMATDESCRIPTOR* setPixelFormat();
     #endif
     #pragma endregion
 }
