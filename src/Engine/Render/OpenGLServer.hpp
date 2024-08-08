@@ -34,7 +34,7 @@ namespace OpenGLRenderer
     #pragma region Windows
     #ifdef WIN32
     void CreateContextWindows(ecs_iter_t *it);
-    void SetWindowContext(WNDCLASS *wc, OpenGLWindows*);
+    void SetWindowContext(WNDCLASS *wc, OpenGLWindows* windowsContext);
     void RunOpenGLWindows(ecs_iter_t *it);
     void EndOpenGLWindows(ecs_iter_t *it);
     PIXELFORMATDESCRIPTOR* setPixelFormat();
