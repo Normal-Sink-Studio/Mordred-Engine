@@ -119,7 +119,7 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 void OpenGLRenderer::SetWindowContext(WNDCLASS* wc, OpenGLWindows* windowsContext)
 {
     wc->style = CS_OWNDC;
-    wc->lpfnWndProc = windowsContext->WndProc;
+    wc->lpfnWndProc = WndProc;
     wc->cbClsExtra = 0;
     wc->cbWndExtra = 0;
     wc->hInstance = windowsContext->hInstance;
@@ -200,5 +200,24 @@ void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
     UnregisterClass("OpenGLWinClass", windowsContext->hInstance);
 }
 
+// Window procedure
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
+    case WM_CREATE:
+        // Set the window to maximized state
+        ShowWindow(hWnd, SW_MAXIMIZE);
+        return 0;
+    case WM_CLOSE:
+        PostQuitMessage(0);
+        return 0;
+    case WM_DESTROY:
+        return 0;
+    case WM_SIZE:
+        glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
+        return 0;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+}
 #endif
 #pragma endregion
