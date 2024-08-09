@@ -115,7 +115,7 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 #endif
 #pragma endregion
 #pragma region Windows
-#ifdef WIN32
+#ifdef _WIN32
 void OpenGLRenderer::SetWindowContext(WNDCLASS* wc, OpenGLWindows* windowsContext)
 {
     wc->style = CS_OWNDC;
