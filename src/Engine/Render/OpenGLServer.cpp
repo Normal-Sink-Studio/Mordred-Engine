@@ -116,25 +116,27 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 #pragma endregion
 #pragma region Windows
 #ifdef _WIN32
-void OpenGLRenderer::SetWindowContext(WNDCLASS* wc, OpenGLWindows* windowsContext)
+void OpenGLRenderer::SetWindowContext(ecs_iter_t *it)
 {
-    wc->style = CS_OWNDC;
-    wc->lpfnWndProc = WndProc;
-    wc->cbClsExtra = 0;
-    wc->cbWndExtra = 0;
-    wc->hInstance = windowsContext->hInstance;
-    wc->hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wc->hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc->hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    wc->lpszMenuName = NULL;
-    wc->lpszClassName = "OpenGLWinClass";
+    OpengGLWindows *windowsContext = ecs_field(it, OpenGLWindows, 0);
+    windowsContext->wc->style = CS_OWNDC;
+    windowsContext->wc->lpfnWndProc = WndProc;
+    windowsContext->wc->cbClsExtra = 0;
+    windowsContext->wc->cbWndExtra = 0;
+    windowsContext->wc->hInstance = windowsContext->hInstance;
+    windowsContext->wc->hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    windowsContext->wc->hCursor = LoadCursor(NULL, IDC_ARROW);
+    windowsContext->wc->hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    windowsContext->wc->lpszMenuName = NULL;
+    windowsContext->wc->lpszClassName = "OpenGLWinClass";
 }
 
 void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
 {
     OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
     SetWindowContext(windowsContext->windowClass, windowsContext);
-    RegisterClass(windowsContext->windowClass);
+    ECS_SYSTEM(it->world, egisterClass, EcsOnStart, OpenGLWindows);
+    //RegisterClass(windowsContext->windowClass);
     windowsContext->hWnd = CreateWindow(
         "OpenGLWinClass", "Mordred Engine",
         WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
