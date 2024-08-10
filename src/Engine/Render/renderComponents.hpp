@@ -28,12 +28,6 @@ namespace Mordred
         #elif WIN32
         struct OpenGLWindows
         {
-            WNDCLASS* windowClass;
-            HDC hdc;
-            HGLRC hRC;
-            HWND hWnd;
-            MSG msg;
-            HINSTANCE hInstance;
             bool quit = false;
         };
         #endif

@@ -116,56 +116,13 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 #pragma endregion
 #pragma region Windows
 #ifdef _WIN32
-void OpenGLRenderer::SetWindowContext(ecs_iter_t *it)
-{
-    OpengGLWindows *windowsContext = ecs_field(it, OpenGLWindows, 0);
-    windowsContext->wc->style = CS_OWNDC;
-    windowsContext->wc->lpfnWndProc = WndProc;
-    windowsContext->wc->cbClsExtra = 0;
-    windowsContext->wc->cbWndExtra = 0;
-    windowsContext->wc->hInstance = windowsContext->hInstance;
-    windowsContext->wc->hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    windowsContext->wc->hCursor = LoadCursor(NULL, IDC_ARROW);
-    windowsContext->wc->hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    windowsContext->wc->lpszMenuName = NULL;
-    windowsContext->wc->lpszClassName = "OpenGLWinClass";
-}
 
 void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
 {
-    OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
-    SetWindowContext(windowsContext->windowClass, windowsContext);
-    ECS_SYSTEM(it->world, egisterClass, EcsOnStart, OpenGLWindows);
-    //RegisterClass(windowsContext->windowClass);
-    windowsContext->hWnd = CreateWindow(
-        "OpenGLWinClass", "Mordred Engine",
-        WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL, NULL, windowsContext->hInstance, NULL);
-    PIXELFORMATDESCRIPTOR* pixelFormatDescriptor = setPixelFormat();
-
-    int pixelFormat = ChoosePixelFormat(windowsContext->hdc, pixelFormatDescriptor);
-    SetPixelFormat(windowsContext->hdc, pixelFormat, pixelFormatDescriptor);
-
-    windowsContext->hRC = wglCreateContext(windowsContext->hdc);
-    wglMakeCurrent(windowsContext->hdc, windowsContext->hRC);
-
-    ShowWindow(windowsContext->hWnd, SW_SHOW);
-    UpdateWindow(windowsContext->hWnd);
+    
 }
 PIXELFORMATDESCRIPTOR* OpenGLRenderer::setPixelFormat()
 {
-    PIXELFORMATDESCRIPTOR pfd;
-    memset(&pfd, 0, sizeof(pfd));
-    pfd.nSize = sizeof(pfd);
-    pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 24;
-    pfd.cDepthBits = 32;
-    pfd.iLayerType = PFD_MAIN_PLANE;
-    return &pfd;
 
 }
 void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
@@ -173,33 +130,12 @@ void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
     OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
     while(!windowsContext->quit)
     {
-        if (PeekMessage(&windowsContext->msg, NULL, 0, 0, PM_REMOVE)) {
-            if (windowsContext->msg.message == WM_QUIT) {
-                windowsContext->quit = TRUE;
-            } 
-            else 
-            {
-                TranslateMessage(&windowsContext->msg);
-                DispatchMessage(&windowsContext->msg);
-            }
-        } 
-        else 
-        {
-            // OpenGL rendering code goes here
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            // Render scene
-            SwapBuffers(windowsContext->hdc);
-        }
+        
     }
 }
 void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
 {
     OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
-    wglMakeCurrent(NULL, NULL);
-    wglDeleteContext(windowsContext->hRC);
-    ReleaseDC(windowsContext->hWnd, windowsContext->hdc);
-    DestroyWindow(windowsContext->hWnd);
-    UnregisterClass("OpenGLWinClass", windowsContext->hInstance);
 }
 
 // Window procedure
