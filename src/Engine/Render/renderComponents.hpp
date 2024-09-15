@@ -25,9 +25,10 @@ namespace Mordred
             XEvent xevent;
             int displayStatus;
         };
-        #elif WIN32
+        #elif _WIN32
         struct OpenGLWindows
         {
+            HWND* hwnd;
             bool quit = false;
         };
         #endif

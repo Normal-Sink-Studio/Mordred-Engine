@@ -22,13 +22,13 @@ if (WIN32)
     GIT_REPOSITORY https://github.com/SanderMertens/flecs.git
     GIT_TAG master
   )
-  FetchContent_Declare(
-    SDL
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    GIT_TAG master
-  )
+  #FetchContent_Declare(
+   # SDL
+    #GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    #GIT_TAG master
+  #)
   FetchContent_MakeAvailable(flecs)
-  FetchContent_MakeAvailable(SDL)
+  #FetchContent_MakeAvailable(SDL)
   target_include_directories(Mordred-Engine 
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/"
   )

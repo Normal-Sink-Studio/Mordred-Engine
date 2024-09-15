@@ -117,26 +117,7 @@ void OpenGLRenderer::EndOpenGLLinux(ecs_iter_t *it)
 #pragma region Windows
 #ifdef _WIN32
 
-void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
-{
-    
-}
-PIXELFORMATDESCRIPTOR* OpenGLRenderer::setPixelFormat()
-{
-
-}
-void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
-{
-    OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
-    while(!windowsContext->quit)
-    {
-        
-    }
-}
-void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
-{
-    OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
-}
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 // Window procedure
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -157,5 +138,66 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
 }
+
+void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
+{
+    OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
+
+    const char CLASS_NAME[] = "Morded Window";
+
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    WNDCLASS wc = {0};
+
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance     = GetModuleHandle(NULL);
+    wc.lpszClassName = CLASS_NAME;
+
+    RegisterClass(&wc);
+
+    HWND hwnd = CreateWindowEx
+    (
+        CS_OWNDC,                                  // Optional window styles
+        CLASS_NAME,                         // Window class name
+        "Mordred Engine",                    // Window title
+        WS_OVERLAPPEDWINDOW | WS_VISIBLE | 0x01000000L,                // Window style
+        CW_USEDEFAULT, CW_USEDEFAULT,       // Position (x, y)
+        screenWidth, screenHeight,                           // Size (width, height)
+        NULL,                               // Parent window
+        NULL,                               // Menu
+        wc.hInstance,                       // Instance handle
+        NULL                                // Additional application data
+    );
+
+    if(hwnd == NULL)
+    {
+        return;
+    }
+
+    ShowWindow(hwnd, SW_SHOW);
+
+    windowsContext->hwnd = &hwnd;
+}
+//PIXELFORMATDESCRIPTOR* OpenGLRenderer::setPixelFormat()
+///{
+
+//}
+void OpenGLRenderer::RunOpenGLWindows(ecs_iter_t *it)
+{
+    OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
+    MSG msg = { };
+    while (GetMessage(&msg, NULL, 0, 0) > 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+}
+void OpenGLRenderer::EndOpenGLWindows(ecs_iter_t *it)
+{
+    OpenGLWindows* windowsContext = ecs_field(it, OpenGLWindows, 0);
+}
+
+
 #endif
 #pragma endregion
