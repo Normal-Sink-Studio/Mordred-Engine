@@ -11,7 +11,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 find_package(OpenGL REQUIRED)
-
+include_directories(include)
 if (WIN32)
   # Windows-specific settings
   set(CMAKE_CXX_STANDARD 20)
@@ -22,13 +22,7 @@ if (WIN32)
     GIT_REPOSITORY https://github.com/SanderMertens/flecs.git
     GIT_TAG master
   )
-  #FetchContent_Declare(
-   # SDL
-    #GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    #GIT_TAG master
-  #)
   FetchContent_MakeAvailable(flecs)
-  #FetchContent_MakeAvailable(SDL)
   target_include_directories(Mordred-Engine 
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/"
   )
@@ -37,6 +31,7 @@ if (WIN32)
     PRIVATE flecs::flecs_static
     PRIVATE OpenGL::GL
     PRIVATE gdi32
+    PRIVATE glfw
   )
 else()
   # Linux-specific settings

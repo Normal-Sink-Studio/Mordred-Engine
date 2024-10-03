@@ -6,6 +6,12 @@
 #include <cstddef>
 #include <stdio.h> 
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include "glext.h" // For modern OpenGL extensions
+#include <GL/wglext.h>  // For WGL (Windows OpenGL) functions
+
+
 using namespace OpenGLRenderer;
 using namespace Mordred;
 using namespace  Components;
@@ -139,6 +145,80 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     }
 }
 
+GLuint CreateShaderProgram(const char* vertexSource, const char* fragmentSource)
+{
+    // Vertex Shader
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexSource, NULL);
+    glCompileShader(vertexShader);
+
+    // Check for vertex shader compile errors
+    GLint success;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        MessageBoxA(0, infoLog, "ERROR: Vertex Shader Compilation Failed", 0);
+    }
+
+    // Fragment Shader
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+    glCompileShader(fragmentShader);
+
+    // Check for fragment shader compile errors
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        MessageBoxA(0, infoLog, "ERROR: Fragment Shader Compilation Failed", 0);
+    }
+
+    // Shader Program
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    // Check for linking errors
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        MessageBoxA(0, infoLog, "ERROR: Shader Program Linking Failed", 0);
+    }
+
+    // Cleanup
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
+
+PIXELFORMATDESCRIPTOR OpenGLRenderer::setPixelFormat()
+{
+    PIXELFORMATDESCRIPTOR pfd =
+    {
+	sizeof(PIXELFORMATDESCRIPTOR),
+	1,
+	PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,    // Flags
+	PFD_TYPE_RGBA,        // The kind of framebuffer. RGBA or palette.
+	32,                   // Colordepth of the framebuffer.
+	0, 0, 0, 0, 0, 0,
+	0,
+	0,
+	0,
+	0, 0, 0, 0,
+	24,                   // Number of bits for the depthbuffer
+	8,                    // Number of bits for the stencilbuffer
+	0,                    // Number of Aux buffers in the framebuffer.
+	PFD_MAIN_PLANE,
+	0,
+	0, 0, 0
+    };
+    return pfd;
+}
+
 void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
 {
     OpenGLWindows* windowsContext= ecs_field(it, OpenGLWindows, 0);
@@ -170,6 +250,16 @@ void OpenGLRenderer::CreateContextWindows(ecs_iter_t *it)
         NULL                                // Additional application data
     );
 
+    HDC hdc = GetDC(hwnd);
+
+    PIXELFORMATDESCRIPTOR pfd = setPixelFormat();
+    int pixelFormat = ChoosePixelFormat(hdc, &pfd);
+    SetPixelFormat(hdc, pixelFormat, &pfd);
+    
+    HGLRC openGLContext = wglCreateContext(hdc);
+    wglMakeCurrent(hdc, openGLContext);
+
+    MessageBoxA(0,(char*)glGetString(GL_VERSION), "OPENGL VERSION",0);
     if(hwnd == NULL)
     {
         return;

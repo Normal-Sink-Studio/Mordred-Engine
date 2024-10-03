@@ -37,7 +37,7 @@ namespace OpenGLRenderer
     void SetWindowContext(WNDCLASS *wc, Mordred::Components::OpenGLWindows* windowsContext);
     void RunOpenGLWindows(ecs_iter_t *it);
     void EndOpenGLWindows(ecs_iter_t *it);
-    PIXELFORMATDESCRIPTOR* setPixelFormat();
+    PIXELFORMATDESCRIPTOR setPixelFormat();
     #endif
     #pragma endregion
 }
