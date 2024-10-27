@@ -1,5 +1,5 @@
 const std: type = @import("std");
-const window: type = @import("Renderer/Window.zig");
+//const window: type = @import("Renderer/Window.zig");
 pub fn Run() void {
     //create main loop here
     Start();
@@ -13,7 +13,7 @@ pub fn Run() void {
 }
 
 fn Start() void {
-    window.createWindow("Mordred Engine", 1280, 720);
+    //window.createWindow("Mordred Engine", 1280, 720);
 }
 
 fn UpdateLoop() void {
