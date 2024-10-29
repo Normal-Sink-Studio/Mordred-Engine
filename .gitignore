@@ -384,3 +384,5 @@ _deps
 #zig build files
 /.zig-cache
 /zig-out
+/.zig-cache
+/.zig-cache/z

@@ -3,7 +3,11 @@ const std = @import("std");
 // The build function configures the build process for the Mordred-Engine project.
 pub fn build(b: *std.Build) void {
 
-    const target = b.standardTargetOptions(.{});
+const target = b.resolveTargetQuery(.{
+    .cpu_arch = .x86_64,
+    .os_tag = .windows,
+    .abi = .msvc,
+});
 
 
     // Create an executable target with the name "Mordred-Engine"
