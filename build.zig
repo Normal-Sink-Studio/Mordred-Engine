@@ -2,21 +2,31 @@ const std = @import("std");
 
 // The build function configures the build process for the Mordred-Engine project.
 pub fn build(b: *std.Build) void {
+
+    const target = b.standardTargetOptions(.{});
+
+
     // Create an executable target with the name "Mordred-Engine"
     // The main source file is located at "src/main.zig"
     // The target platform is the host platform.
     const exe = b.addExecutable(.{
         .name = "Mordred-Engine",
         .root_source_file = b.path("src/main.zig"),
-        .target = b.host,
+        .target = target,
     });
+
+    
 
     // Define the path to the GLFW library and its headers
 
     exe.linkLibC();
+    exe.linkSystemLibrary("opengl32");
     exe.linkSystemLibrary("user32");
     exe.linkSystemLibrary("gdi32");
     exe.linkSystemLibrary("shell32");
+
+
+    // Specify libraries to link against
 
     const GLFW_Path = b.path("dependencies/windows/64 bit/GLFW/lib-vc2022/");
     const GLFW_Headers = b.path("dependencies/windows/64 bit/GLFW/include/");
