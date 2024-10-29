@@ -1,1 +1,1 @@
-Mordred Engine is a proprietary, Entity Component System Based, engine being developed by Normal Sink Studios
+Mordred Engine is an Open Source game engine being programmed in the Zig Programming Language meant to make the Entity Component System Architecture of Game Development more approachable 
