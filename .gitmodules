@@ -1,6 +1,0 @@
-[submodule "extern/glfw"]
-	path = extern/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "extern/flecs"]
-	path = extern/flecs
-	url = https://github.com/SanderMertens/flecs.git
