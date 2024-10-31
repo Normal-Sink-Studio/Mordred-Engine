@@ -4,3 +4,5 @@ pub const Enity = struct {
 };
 
 fn spawnEntity() void {}
+
+fn addComponent() void {}
