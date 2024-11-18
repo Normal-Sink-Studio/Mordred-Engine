@@ -1,13 +1,13 @@
-pub const Schedule = struct {};
+const systems = @import("../Logic/ECS/ECS_Systems.zig");
 
-pub const Start = Schedule;
+pub const Start = systems.NewSchedule();
 
-pub const PreUpdate = Schedule;
+pub const PreUpdate = systems.NewSchedule();
 
-pub const Update = Schedule;
+pub const Update = systems.NewSchedule();
 
-pub const PostUpdate = Schedule;
+pub const PostUpdate = systems.NewSchedule();
 
-pub const FixedUpdate = Schedule;
+pub const FixedUpdate = systems.NewSchedule();
 
-pub const InputUpdate = Schedule;
+pub const InputUpdate = systems.NewSchedule();

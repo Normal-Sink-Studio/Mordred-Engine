@@ -1,6 +1,6 @@
 const Schedules: type = @import("../../Data/Engine_Schedules.zig");
 
-pub fn addComponent(comptime T: *type) !void {
+pub fn addComponent(comptime T: type) !void {
     //const componentType = @TypeOf(T);
 
     if (@typeInfo(T) != .Struct) {

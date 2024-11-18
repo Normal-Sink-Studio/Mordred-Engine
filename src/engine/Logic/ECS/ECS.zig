@@ -8,17 +8,17 @@ usingnamespace Component;
 usingnamespace Entity;
 usingnamespace World;
 
-pub fn AddSchedule(T: type) void {
-    try World.addSchedule(T);
+pub fn AddSchedule() void {
+    try World.addSchedule();
 }
 
-pub fn ProgressSchedule(_: type) void {}
+pub fn ProgressSchedule(_: *type) void {}
 
-pub fn AddSystem(T: *type, function: *fn () void) void {
-    World.addSystem(T, function);
+pub fn AddSystem(schedule: struct {}, system: fn () void) void {
+    World.addSystem(schedule, system);
 }
 
-pub fn AddComponent(T: *type) void {
+pub fn AddComponent(T: type) void {
     try Component.addComponent(T);
 }
 
