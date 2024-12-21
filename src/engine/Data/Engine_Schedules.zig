@@ -1,13 +1,13 @@
 const systems = @import("../Logic/ECS/ECS_Systems.zig");
 
-pub const Start = systems.NewSchedule();
+pub var Start = systems.NewSchedule();
 
-pub const PreUpdate = systems.NewSchedule();
+pub var PreUpdate = systems.NewSchedule();
 
-pub const Update = systems.NewSchedule();
+pub var Update = systems.NewSchedule();
 
-pub const PostUpdate = systems.NewSchedule();
+pub var PostUpdate = systems.NewSchedule();
 
-pub const FixedUpdate = systems.NewSchedule();
+pub var FixedUpdate = systems.NewSchedule();
 
-pub const InputUpdate = systems.NewSchedule();
+pub var InputUpdate = systems.NewSchedule();

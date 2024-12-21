@@ -1,46 +1,34 @@
 const std = @import("std");
 const schedules = @import("../../Data/Engine_Schedules.zig");
+const allocatorManager = @import("../Memory/AllocatorManager.zig");
 
+const allocator = allocatorManager.getAllocator();
 pub const Schedule = struct {
-    systems: std.ArrayList(*const fn () void),
+    systems: std.ArrayListUnmanaged(*const fn () void),
 };
 
 pub fn NewSchedule() Schedule {
-    const allocator = getAllocator();
     return Schedule{
-        .systems = std.ArrayList(*const fn () void).init(allocator),
+        .systems = std.ArrayListUnmanaged(*const fn () void){},
     };
 }
 
 pub fn addSystem(schedule: *Schedule, system: *const fn () void) void {
-    try schedule.systems.append(system) catch std.debug.print("ERROR: FAILED TO ADD SYSTEM\n", {});
+    schedule.systems.append(allocator, system) catch |err| {
+        std.debug.print("ERROR: {}\n", .{err});
+        schedule.systems.deinit(allocator);
+    };
+}
+pub fn Progress(schedule: *Schedule) void {
+    const length = schedule.systems.items.len;
+    var i: u32 = 0;
+    while (i < length) {
+        const func = schedule.systems.items[i];
+        func();
+        i += 1;
+    }
 }
 
-pub fn Progress(_: *Schedule) void {}
-
-// AllocatorManager struct
-pub const AllocatorManager = struct {
-    gpa: std.heap.GeneralPurposeAllocator(.{}),
-};
-
-// AllocatorManager functions
-pub fn AllocatorManager_init() void {
-    const instance = AllocatorManager_getInstance();
-    instance.gpa = std.heap.GeneralPurposeAllocator(.{}){};
+pub fn clearSchedule(schedule: * Schedule) void {
+    schedule.systems.deinit(allocator);
 }
-
-pub fn AllocatorManager_deinit() void {
-    const instance = AllocatorManager_getInstance();
-    instance.gpa.deinit();
-}
-
-pub fn getAllocator() std.mem.Allocator {
-    return AllocatorManager_getInstance().gpa.allocator();
-}
-
-fn AllocatorManager_getInstance() *AllocatorManager {
-    return &globalInstance;
-}
-
-// Global AllocatorManager instance
-var globalInstance: AllocatorManager = undefined;

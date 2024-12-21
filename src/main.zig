@@ -4,5 +4,7 @@ const ECS: type = @import("engine/Logic/ECS/ECS.zig");
 const test2 = struct { test3: i32 };
 
 pub fn main() void {
-    Engine.Setup();
+    Engine.Init();
+    //user functions here
+    Engine.Run();
 }
