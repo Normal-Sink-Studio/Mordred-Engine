@@ -9,6 +9,7 @@ const allocator = allocatorManager.getAllocator();
 
 //var Scenes = std.StringHashMap(std.ArrayList(u32)).init(allocator);
 var idStack = std.ArrayListUnmanaged(u32){};
+var entities = std.DynamicBitSetUnmanaded.
 var ID: u32 = 0;
 
 pub fn spawnEntity() u32 {
