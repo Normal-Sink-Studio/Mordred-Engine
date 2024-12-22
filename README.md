@@ -30,7 +30,9 @@ Mordred Engine has two build systems the `build.zig` file and the `Makefile`
 
 ## Used in
 
-- Feral Soul by Normal Sink Studios![Feral Soul](docs/images/projects/FeralSoulTitle.png)
+- Feral Soul by Normal Sink Studios
+
+  ![Feral Soul](docs/images/projects/FeralSoulTitle.png)
 
 #
 
@@ -40,4 +42,4 @@ Mordred Engine has two build systems the `build.zig` file and the `Makefile`
 - [Oreboat](https://github.com/Oreboat)
 - [Yuki-Scribbles](https://github.com/yuki-scribbles)
 
-![Normal Sink Studios](docs/images/logos/NormalSinkStudio3.png)
+![Normal Sink Studios](docs/images/logos/Normal_Sink_Studio3.png)
