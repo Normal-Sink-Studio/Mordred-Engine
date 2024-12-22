@@ -40,4 +40,4 @@ Mordred Engine has two build systems the `build.zig` file and the `Makefile`
 - [Oreboat](https://github.com/Oreboat)
 - [Yuki-Scribbles](https://github.com/yuki-scribbles)
 
-![Normal Sink Studios](docs/images/logos/NormalSinkStudio3.png)
+![Normal Sink Studios](docs/images/logos/Normal_Sink_Studio3.png)
