@@ -1,47 +1,47 @@
 const std = @import("std");
 const allocatorManager = @import("../Memory/AllocatorManager.zig");
-const pageSize: u8 = 5;
 
 pub const Enity: u32 = 0;
 
 const allocator = allocatorManager.getAllocator();
-var idStack = std.ArrayListUnmanaged(u32){};
 var entities : std.DynamicBitSetUnmanaged = .{};
-var ID: u32 = 0;
 
 pub fn spawnEntity() u32 {
-    if (entities.count() != 0){
-        entities.resize(allocator, 2, true) catch |err| { //add ID to the idStack
-        std.debug.print("ERROR: {}\n", .{err});
+    //iterate through the Entity List to check for the first unused bit otherwise add a new bit to the bitset
+    if(entities.bit_length != 0){
+        var i: u32 = 0;
+        while(i < entities.bit_length)
+        {
+            std.debug.print("Iter at {}\n", .{i});
+            if(!entities.isSet(i)){
+                entities.set(i);
+                std.debug.print("Spawning Entity {}\n", .{i});
+                return @intCast(i);
+            }
+            i += 1;
+        }
+        entities.resize(allocator, entities.bit_length + 1, true) catch |err| { 
+            std.debug.print("ERROR: {}\n", .{err});
+            
         } ;
+        std.debug.print("Spawning Entity {}\n", .{entities.bit_length - 1});
+        return @intCast(entities.bit_length - 1);
     }
-    std.debug.print("Bitset Length is now {}\n", .{entities.count()});
-    if (idStack.items.len == 0) {
-        const id: u32 = ID;
-        ID += 1;
-        std.debug.print("Spawning Entity {}\n", .{id});
-        return id;
-    } else {
-        const id: u32 = idStack.pop();
-        std.debug.print("Spawning Entity {}\n", .{id});
-        return id;
+    else{
+        entities.resize(allocator, 1, true) catch |err| {
+            std.debug.print("ERROR: {}\n", .{err});
+        } ;
+        std.debug.print("Spawning Entity {}\n", .{0});
+        return 0;
     }
 }
 
 pub fn deleteEntity(Entity: u32) void {
     //remove from entity list
+    entities.unset(Entity);
     std.debug.print("Removing Entity {} from list\n", .{Entity});
-    idStack.append(allocator, Entity) catch |err| { //add ID to the idStack
-        std.debug.print("ERROR: {}\n", .{err});
-    };
-    std.debug.print("Unused ID Count: {}\n", .{idStack.items.len});
 }
 
 pub fn deinit() void {
-    // var iter = Scenes.valueIterator();
-    //while(iter.next())|value_ptr|{
-    //  const Entities = value_ptr.*;
-    // }
-    // Scenes.deinit();
-    idStack.deinit(allocator);
+    entities.deinit(allocator);
 }
