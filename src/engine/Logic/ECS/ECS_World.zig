@@ -1,18 +1,21 @@
 const std = @import("std");
 const allocatorManager = @import("../Memory/AllocatorManager.zig");
 const pageSize: u8 = 5;
-const entities = std.ArrayList(u32[pageSize]);
 
 pub const Enity: u32 = 0;
 
 const allocator = allocatorManager.getAllocator();
-
-//var Scenes = std.StringHashMap(std.ArrayList(u32)).init(allocator);
 var idStack = std.ArrayListUnmanaged(u32){};
-var entities = std.DynamicBitSetUnmanaded.
+var entities : std.DynamicBitSetUnmanaged = .{};
 var ID: u32 = 0;
 
 pub fn spawnEntity() u32 {
+    if (entities.count() != 0){
+        entities.resize(allocator, 2, true) catch |err| { //add ID to the idStack
+        std.debug.print("ERROR: {}\n", .{err});
+        } ;
+    }
+    std.debug.print("Bitset Length is now {}\n", .{entities.count()});
     if (idStack.items.len == 0) {
         const id: u32 = ID;
         ID += 1;
