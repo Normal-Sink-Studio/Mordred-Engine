@@ -18,11 +18,8 @@ pub fn Run() void {
 
 fn Start() void {
     std.debug.print("Start function\n", .{});
-    const Entity1 = world.spawnEntity();
     _ = world.spawnEntity();
-    _ = world.spawnEntity();
-    world.deleteEntity(Entity1);
-    _ = world.spawnEntity();
+    
 
     window.createWindow("Mordred Engine", 1280, 720);
 }

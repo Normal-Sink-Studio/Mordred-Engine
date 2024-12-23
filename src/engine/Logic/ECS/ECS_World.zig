@@ -6,6 +6,7 @@ pub const Enity: u32 = 0;
 const allocator = allocatorManager.getAllocator();
 var entities : std.DynamicBitSetUnmanaged = .{};
 
+//Entity Logic
 pub fn spawnEntity() u32 {
     //iterate through the Entity List to check for the first unused bit otherwise add a new bit to the bitset
     if(entities.bit_length != 0){
@@ -44,4 +45,19 @@ pub fn deleteEntity(Entity: u32) void {
 
 pub fn deinit() void {
     entities.deinit(allocator);
+}
+
+//Component Logic
+
+const SparseSet = struct {
+    //create sparse list
+    sparseList: std.ArrayListUnmanaged([5]u32),
+    //create dense list
+    denseList: std.ArrayListUnmanaged(type)
+};
+
+pub fn newComponent(_: type) void {
+    //check to make sure component is of type struct
+    //create Sparse Set for the component's data
+    //store the sparse set somehow
 }

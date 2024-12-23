@@ -1,5 +1,4 @@
 //This file is a wrapper for everything else in the ECS
-const Entity: type = @import("ECS_Entity.zig");
 const World: type = @import("ECS_World.zig");
 const Schedules: type = @import("../../Data/Engine_Schedules.zig");
 
@@ -14,6 +13,4 @@ pub fn AddSystem(schedule: struct {}, system: fn () void) void {
     World.addSystem(schedule, system);
 }
 
-pub fn SpawnEntity() void {
-    Entity.spawnEntity().addComponent();
-}
+
