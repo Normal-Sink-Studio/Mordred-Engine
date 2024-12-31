@@ -1,7 +1,7 @@
 
 # Mordred Engine
 
-Mordred Engine is an open source Entity Component System based game engine build in the Zig programming Language
+Mordred Engine is an open source Entity Component System based game engine built in the Zig programming Language
 
 ## Why ECS
 Entity Component System, or ECS for short, provides a simple, modular approach to game design using the principles of Data Oriented design principles. ECS also provides a way of keeping data stored in the CPU's Cache rather then constantly requesting data from RAM. As such, when done correctly ECS can provide many optimizations over the traditional approach of Object Oriented Design.
@@ -40,6 +40,5 @@ Mordred Engine has two build systems the `build.zig` file and the `Makefile`
 
 ## Developers
 - [Oreboat](https://github.com/Oreboat)
-- [Yuki-Scribbles](https://github.com/yuki-scribbles)
 
 ![Normal Sink Studios](docs/images/logos/Normal_Sink_Studio3.png)
